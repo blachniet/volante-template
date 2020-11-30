@@ -1,0 +1,38 @@
+{
+  "debug": true,
+  "attach": [
+    "volante-console",
+    "volante-express",
+    "volante-dashboard",
+    "volante-mongo"
+  ],
+  "attachLocal": [
+    "src/socket",
+    "src/swagger",
+    "src/example"
+  ],
+  "VolanteMongo": {
+    "host": "localhost",
+    "port": 27017,
+    "namespaces": {
+      "example": "volante-template.example"
+    }
+  },
+  "VolanteExpress": {
+    "bind": "0.0.0.0",
+    "port": 3000,
+    "cors": ["http://localhost:8080"]
+  },
+  "VolanteDashboard": {
+    "user": "admin",
+    "pass": "admin",
+    "title": "Hello"
+  },
+  "auth": {
+    "jwtSecret": "besuretochangethissecret"
+  },
+  "swagger": {
+    "title": "Volante Template Server",
+    "description": "Swagger docs for volante-template"
+  }
+}

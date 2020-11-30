@@ -1,0 +1,28 @@
+{
+  "name": "volante-template",
+  "version": "1.0.0",
+  "description": "Template for Volante backend project using mongo",
+  "bin": {
+    "volante-template": "src/index.js"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon --exec npm start",
+    "start": "node src/index.js",
+    "build": "docker build -t localhost:5000/volante-template ."
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "axios": "^0.21.0",
+    "lodash": "^4.17.20",
+    "swagger-jsdoc": "^4.2.0",
+    "swagger-ui-dist": "^3.37.2",
+    "volante": "^3.4.1",
+    "volante-console": "^2.3.2",
+    "volante-dashboard": "^2.19.3",
+    "volante-express": "^2.10.0",
+    "volante-mongo": "^5.0.1"
+  }
+}
