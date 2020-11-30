@@ -6,6 +6,11 @@ const version = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.j
 
 module.exports = {
   name: 'SwaggerModule',
+  props: {
+    enabled: true,
+    title: '',
+    description: '',
+  },
   data() {
     return {
       router: null,
@@ -14,9 +19,9 @@ module.exports = {
         definition: {
           openapi: '3.0.1',
           info: {
-            title: this.$hub.config.swagger.title,
+            title: this.title,
             version,
-            description: this.$hub.config.swagger.description,
+            description: this.description,
           },
           securityDefinitions: {
             JWT: {
@@ -64,7 +69,9 @@ module.exports = {
   },
   events: {
     'VolanteExpress.pre-start'(app) {
-      app.use(this.router);
+      if (this.enabled) {
+        app.use(this.router);
+      }
     },
   },
   methods: {

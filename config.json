@@ -24,6 +24,7 @@
     "cors": ["http://localhost:8080"]
   },
   "VolanteDashboard": {
+    "enabled": true,
     "user": "admin",
     "pass": "admin",
     "title": "Hello"
@@ -31,7 +32,8 @@
   "auth": {
     "jwtSecret": "besuretochangethissecret"
   },
-  "swagger": {
+  "SwaggerModule": {
+    "enabled": true,
     "title": "Volante Template Server",
     "description": "Swagger docs for volante-template"
   }
