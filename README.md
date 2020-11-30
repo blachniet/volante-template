@@ -10,7 +10,7 @@ The following documentation will describe how to get an end-to-end demo working.
 
 1. Follow Development (npm run dev) instructions for vuestro-template
 1. `docker run -d --name mongo -p 27017:27017 msmiley/mongo-alpine` (or install locally)
-1. `git clone git@github.com:msmiley\volante-template`
+1. `git clone git@github.com:msmiley/volante-template`
 1. `cd volante-template`
 1. `npm i`
 1. `npm run dev`
