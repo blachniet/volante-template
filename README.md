@@ -19,7 +19,17 @@ The following documentation will describe how to get an end-to-end demo working.
 
 This template includes the volante-dashboard package, which provides a pre-built dashboard for visibility into the events and modules making up the project. It can be browsed to at:
 
-http://localhost:8080/volante-dashboard
+http://localhost:3000/volante-dashboard
+
+The Volante Dashboard can be disabled (e.g. for production) by setting the `enabled` flag to false in config.json.
+
+## Swagger UI
+
+This template also parses all swagger/OpenAPI compatible docs and renders them in a Swagger UI for testing and exploration. The UI is served up by default at:
+
+http://localhost:3000/api/swagger
+
+The Swagger UI page can be disabled (e.g. for production) by setting the `enabled` flag to false in config.json.
 
 ## Release (npm run build)
 
