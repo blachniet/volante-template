@@ -4,11 +4,11 @@
     "volante-console",
     "volante-express",
     "volante-dashboard",
-    "volante-mongo"
+    "volante-mongo",
+    "volante-swagger"
   ],
   "attachLocal": [
     "src/socket",
-    "src/swagger",
     "src/example"
   ],
   "VolanteMongo": {
@@ -29,10 +29,7 @@
     "pass": "admin",
     "title": "Hello"
   },
-  "auth": {
-    "jwtSecret": "besuretochangethissecret"
-  },
-  "SwaggerModule": {
+  "VolanteSwagger": {
     "enabled": true,
     "title": "Volante Template Server",
     "description": "Swagger docs for volante-template"
