@@ -17,13 +17,11 @@
   "dependencies": {
     "axios": "^0.21.0",
     "lodash": "^4.17.20",
-    "swagger-jsdoc": "^4.2.0",
-    "swagger-ui-dist": "^3.37.2",
-    "volante": "^3.6.0",
+    "volante": "^3.11.0",
     "volante-console": "^2.3.2",
-    "volante-dashboard": "^2.20.1",
-    "volante-express": "^2.10.0",
-    "volante-mongo": "^5.1.0",
-    "volante-swagger": "^1.0.3"
+    "volante-dashboard": "^3.2.0",
+    "volante-express": "^4.0.0",
+    "volante-mongo": "^6.3.1",
+    "volante-swagger": "^3.0.0"
   }
 }
