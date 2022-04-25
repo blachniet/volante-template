@@ -62,7 +62,7 @@ module.exports = {
      */
     this.router.route('/api/v1/example')
     .get((req, res) => {
-      this.$emit('mongo.find', 'example', {}, (err, docs) => {
+      this.$spokes.VolanteMongo.find('example', {}, (err, docs) => {
         if (err) {
           return res.status(500).send(err);
         }
@@ -70,7 +70,7 @@ module.exports = {
       });
     })
     .post((req, res) => {
-      this.$emit('mongo.insertOne', 'example', req.body, (err, rslt) => {
+      this.$spokes.VolanteMongo.insertOne('example', req.body, (err, rslt) => {
         if (err) {
           return res.status(500).send(err);
         }
@@ -122,7 +122,7 @@ module.exports = {
      */
     this.router.route('/api/v1/example/:id')
     .put((req, res) => {
-      this.$emit('mongo.updateById', 'example', req.params.id, req.body, (err, rslt) => {
+      this.$spokes.VolanteMongo.updateById('example', req.params.id, req.body, (err, rslt) => {
         if (err) {
           return res.status(500).send(err);
         }
@@ -130,7 +130,7 @@ module.exports = {
       });
     })
     .delete((req, res) => {
-      this.$emit('mongo.deleteById', 'example', req.params.id, (err, rslt) => {
+      this.$spokes.VolanteMongo.deleteById('example', req.params.id, (err, rslt) => {
         if (err) {
           return res.status(500).send(err);
         }
@@ -139,7 +139,7 @@ module.exports = {
     });
   },
   events: {
-    'VolanteExpress.pre-start'(app) {
+    'VolanteExpress.app'(app) {
       this.$log('adding router to VolanteExpress');
       app.use(this.router);
     },
