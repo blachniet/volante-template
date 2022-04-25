@@ -1,9 +1,9 @@
 {
+  "name": "volante-test-server",
   "debug": true,
   "attach": [
     "volante-console",
     "volante-express",
-    "volante-dashboard",
     "volante-mongo",
     "volante-swagger"
   ],
@@ -20,14 +20,7 @@
   },
   "VolanteExpress": {
     "bind": "0.0.0.0",
-    "port": 3000,
-    "cors": ["http://localhost:8080"]
-  },
-  "VolanteDashboard": {
-    "enabled": true,
-    "user": "admin",
-    "pass": "admin",
-    "title": "Hello"
+    "port": 3000
   },
   "VolanteSwagger": {
     "enabled": true,

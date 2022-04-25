@@ -15,13 +15,12 @@
     "nodemon": "^2.0.6"
   },
   "dependencies": {
-    "axios": "^0.21.0",
-    "lodash": "^4.17.20",
-    "volante": "^3.11.0",
-    "volante-console": "^2.3.2",
-    "volante-dashboard": "^3.2.0",
-    "volante-express": "^4.0.0",
-    "volante-mongo": "^6.3.1",
-    "volante-swagger": "^3.0.0"
+    "axios": "^0.27.0",
+    "lodash": "^4.17.21",
+    "volante": "^6.4.0",
+    "volante-console": "^4.1.0",
+    "volante-express": "^7.0.0",
+    "volante-mongo": "^9.3.0",
+    "volante-swagger": "^5.0.0"
   }
 }
