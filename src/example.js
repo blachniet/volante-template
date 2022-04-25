@@ -62,19 +62,17 @@ module.exports = {
      */
     this.router.route('/api/v1/example')
     .get((req, res) => {
-      this.$spokes.VolanteMongo.find('example', {}, (err, docs) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
+      this.$spokes.VolanteMongo.find('example', {}).then((docs) => {
         res.send(docs);
+      }).catch((err) => {
+        res.status(500).send(err);
       });
     })
     .post((req, res) => {
-      this.$spokes.VolanteMongo.insertOne('example', req.body, (err, rslt) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
+      this.$spokes.VolanteMongo.insertOne('example', req.body).then((rslt) => {
         res.send(rslt);
+      }).catch((err) => {
+        res.status(500).send(err);
       });
     });
     /**
@@ -122,19 +120,17 @@ module.exports = {
      */
     this.router.route('/api/v1/example/:id')
     .put((req, res) => {
-      this.$spokes.VolanteMongo.updateById('example', req.params.id, req.body, (err, rslt) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
+      this.$spokes.VolanteMongo.updateById('example', req.params.id, req.body).then((rslt) => {
         res.send(rslt);
+      }).catch((err) => {
+        res.status(500).send(err);
       });
     })
     .delete((req, res) => {
-      this.$spokes.VolanteMongo.deleteById('example', req.params.id, (err, rslt) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
+      this.$spokes.VolanteMongo.deleteById('example', req.params.id).then((rslt) => {
         res.send(rslt);
+      }).catch((err) => {
+        res.status(500).send(err);
       });
     });
   },
