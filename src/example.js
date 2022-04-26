@@ -120,14 +120,14 @@ module.exports = {
      */
     this.router.route('/api/v1/example/:id')
     .put((req, res) => {
-      this.$spokes.VolanteMongo.updateById('example', req.params.id, req.body).then((rslt) => {
+      this.$spokes.VolanteMongo.updateOne('example', req.params.id, req.body).then((rslt) => {
         res.send(rslt);
       }).catch((err) => {
         res.status(500).send(err);
       });
     })
     .delete((req, res) => {
-      this.$spokes.VolanteMongo.deleteById('example', req.params.id).then((rslt) => {
+      this.$spokes.VolanteMongo.deleteOne('example', req.params.id).then((rslt) => {
         res.send(rslt);
       }).catch((err) => {
         res.status(500).send(err);
@@ -136,7 +136,6 @@ module.exports = {
   },
   events: {
     'VolanteExpress.app'(app) {
-      this.$log('adding router to VolanteExpress');
       app.use(this.router);
     },
   },
