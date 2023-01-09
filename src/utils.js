@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const crypto = require('crypto');
 
 //
@@ -6,7 +5,7 @@ const crypto = require('crypto');
 // token suffix
 //
 exports.getTokenFromAuthorizationHeader = function(hdr) {
-  if (hdr && _.isString(hdr) && hdr.startsWith('Bearer')) {
+  if (hdr && typeof(hdr) === 'string' && hdr.startsWith('Bearer')) {
     let sp = hdr.split('Bearer ');
     if (sp.length === 2) {
       return sp[1];

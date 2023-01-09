@@ -2,7 +2,6 @@
 // The Users Spoke handles all aspects of user accounting except authentication
 //
 const utils = require('./utils');
-const _ = require('lodash');
 
 /**
  * @openapi
@@ -382,13 +381,14 @@ module.exports = {
       });
     },
     userById(_id) {
+      // rehydrate to objectid if string
       if (typeof(_id) === 'string') {
         _id = this.$.VolanteMongo.mongo.ObjectId(_id);
       }
-      return _.find(this.userCache, { _id });
+      return this.userCache.find((o) => o._id.equals(_id));
     },
     userByUsername(username) {
-      return _.find(this.userCache, { username });
+      return this.userCache.find((o) => o.username === username);
     },
     ensureIndex() {
       this.$.VolanteMongo.createIndexes('users', [

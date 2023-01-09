@@ -3,8 +3,6 @@
 // This module implements the concept of Role and provides a method to help
 // other modules enforce permissions
 //
-const mongo = require('mongodb');
-const _ = require('lodash');
 
 /**
  * @openapi
@@ -279,8 +277,10 @@ module.exports = {
       // so we can update the admin role permissions non-destructively to allow
       // adding new permissions
       let perms = {};
-      for (let p of _.flatMap(_.flatMap(this.permissions, 'children'), 'value')) {
-        perms[`permissions.${p}`] = true;
+      for (let p of this.permissions) {
+        for (let c of p.children) {
+          perms[`permissions.${c.value}`] = true;
+        }
       }
       this.$.VolanteMongo.findOneAndUpdate('roles', {
         name: this.adminRole.name,
@@ -312,7 +312,7 @@ module.exports = {
         // rehydrade _ids
         let ids = [];
         for (let i of role_ids) {
-          ids.push(mongo.ObjectId(i));
+          ids.push(this.$.VolanteMongo.mongo.ObjectId(i));
         }
         // we retrieve the role permissions every time in case they change;
         // roles could also be cached from mongo in this module if this has

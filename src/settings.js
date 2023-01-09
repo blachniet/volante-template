@@ -142,7 +142,7 @@ module.exports = {
         if (err) {
           this.$error('error watching settings collection');
         }
-        if (docs.fullDocument && docs.fullDocument.user_id) {
+        if (docs && docs.fullDocument && docs.fullDocument.user_id) {
           this.$debug('settings changed for user', docs.fullDocument.user_id);
         }
         // emit an event here which can be federated to the client-side
