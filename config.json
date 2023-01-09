@@ -8,17 +8,25 @@
     "volante-swagger"
   ],
   "attachLocal": [
+    "src/auth",
+    "src/roles",
+    "src/users",
     "src/socket",
+    "src/settings",
     "src/example"
   ],
   "VolanteMongo": {
     "host": "localhost",
     "port": 27017,
     "namespaces": {
+      "settings": "volante-template.settings",
+      "users": "volante-template.users",
+      "roles": "volante-template.roles",
       "example": "volante-template.example"
     }
   },
   "VolanteExpress": {
+    "autoStart": true,
     "bind": "0.0.0.0",
     "port": 3000
   },

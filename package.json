@@ -12,15 +12,15 @@
     "build": "docker build -t localhost:5000/volante-template ."
   },
   "devDependencies": {
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.20"
   },
   "dependencies": {
-    "axios": "^0.27.0",
+    "axios": "^1.2.2",
     "lodash": "^4.17.21",
-    "volante": "^6.4.0",
-    "volante-console": "^4.1.0",
-    "volante-express": "^7.0.0",
-    "volante-mongo": "^9.3.0",
-    "volante-swagger": "^5.0.0"
+    "volante": "^6.9.0",
+    "volante-console": "^4.3.1",
+    "volante-express": "^7.2.0",
+    "volante-mongo": "^10.4.0",
+    "volante-swagger": "^5.4.0"
   }
 }
