@@ -36,31 +36,31 @@ module.exports = {
       permissions: [
         {
           category: 'General',
-          children: [
+          items: [
             {
+              id: 'examplePermission',
               title: 'Example Permission',
               description: 'just an example',
-              value: 'examplePermission',
             }
           ],
         },
         {
           category: 'Administrative',
-          children: [
+          items: [
             {
+              id: 'manageRoles',
               title: 'Manage Roles',
               description: 'Allow the user to manage roles',
-              value: 'manageRoles',
             },
             {
+              id: 'manageUsers',
               title: 'Manage Users',
               description: 'Allow the user to manage user accounts',
-              value: 'manageUsers',
             },
             {
+              id: 'dev',
               title: 'Developer',
               description: 'Mark a user as a developer, which enables some dev/debug extras',
-              value: 'dev',
             },
           ],
         },
@@ -278,8 +278,8 @@ module.exports = {
       // adding new permissions
       let perms = {};
       for (let p of this.permissions) {
-        for (let c of p.children) {
-          perms[`permissions.${c.value}`] = true;
+        for (let c of p.items) {
+          perms[`permissions.${c.id}`] = true;
         }
       }
       this.$.VolanteMongo.findOneAndUpdate('roles', {

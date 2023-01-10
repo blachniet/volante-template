@@ -73,17 +73,12 @@ module.exports = {
         if (req.body.username && req.body.password) {
           // call local method to authenticate
           this.authenticateUser(req.body).then((result) => {
-            // check if user must change password
-            // if so, reply with object to enable change
-            if (result.mustChangePass) {
-              return res.send({
-                username: result.username,
-                mustChangePass: true,
-                token: result.token,
-              });
-            }
-            // standard successful login
-            res.send(result.token);
+            res.send({
+              fullname: result.fullname,
+              username: result.username,
+              token: result.token,
+              mustChangePass: result.mustChangePass,
+            });
           }).catch((err) => {
             return res.status(401).send(err);
           });
@@ -131,17 +126,22 @@ module.exports = {
       .post((req, res) => {
         // make sure the requesting user is the authenticated user
         if (req.User.username === req.body.username) {
+          // enforce rules on re-using passwords here...
+          // otherwise, hash the new password and save it to user acct
           let newHash = utils.generatePasswordHash(req.body.password);
-          this.$.VolanteMongo.updateOne('users', {
-            username: req.User.username
-          }, {
+          this.$.VolanteMongo.updateOne('users', req.User._id, {
             $set: {
               password: newHash,
               mustChangePass: false,
-            }
+            },
           }).then((result) => {
             // send succesful login
-            res.send(req.User.token);
+            res.send({
+              fullname: req.User.fullname,
+              username: req.User.username,
+              token: req.User.token,
+              mustChangePass: false,
+            });
           }).catch((err) => {
             res.status(500).send('Error updating user mongo doc', err);
           });
@@ -279,30 +279,31 @@ module.exports = {
     //
     // Authenticate a user
     //
-    authenticateUser(obj) {
-      return new Promise((resolve, reject) => { // obj needs to have user and pass fields
-        let user = this.$.Users.userByUsername(obj.username);
+    authenticateUser({ username, password }) {
+      return new Promise((resolve, reject) => {
+        // try to get user from users module
+        let user = this.$.Users.userByUsername(username);
         if (!user) {
           return reject('User not found');
         }
+        this.$debug(`found user account for ${username}, checking password`);
         if (!user.enabled) {
           return reject('User disabled');
         }
-        if (user && user.password) {
-          // check password hash from mongo in standalone
+        if (user.password) {
           // salt was created with the following and is 32 chars long
           // const salt = crypto.randomBytes(16).toString("hex");
           const salt = user.password.substr(0, 32); // split out salt part
           const hash = user.password.substr(32);    // split out hash part
-          let chk = crypto.scryptSync(obj.password, salt, 32).toString("hex");
+          let chk = crypto.scryptSync(password, salt, 32).toString("hex");
           if (chk === hash) {
-            // local auth: hash matches
+            this.$debug(`password validated for ${username}`);
             resolve(user);
           } else {
-            reject('Wrong password');
+            reject(`wrong password for ${username}`);
           }
         } else {
-          reject('Password error');
+          reject(`password error for ${username}`);
         }
       }).then((User) => { // final stage, all user info available
         // delete the password key for privacy
@@ -316,25 +317,25 @@ module.exports = {
     // Process for successful authentication; currently this includes
     // updating mongo with token and lastLogin
     //
-    userAuthenticated(obj) {
+    userAuthenticated(user) {
       return new Promise((resolve, reject) => {
-        if (!obj.username) {
-          return reject('No username!');
+        if (!user.username) {
+          return reject('need username & _id for token generation');
         }
-        this.$log('user authenticated, building token', obj.username);
-        obj.token = this.buildToken(obj);
+        this.$log(`building token for ${user.username}`);
+        user.token = this.buildToken(user);
         let updateOp = {
           $set: {
-            token: obj.token,
+            token: user.token,
             lastLogin: new Date(),
           },
         };
-        if (!obj.firstLogin) {
-          obj.firstLogin = updateOp['$set'].firstLogin = new Date();
+        if (!user.firstLogin) {
+          user.firstLogin = updateOp['$set'].firstLogin = new Date();
         }
         // update mongo
-        this.$.VolanteMongo.updateOne('users', { username: obj.username }, updateOp).then((result) => {
-          resolve(obj);
+        this.$.VolanteMongo.updateOne('users', { username: user.username }, updateOp).then((result) => {
+          resolve(user);
         }).catch((err) => {
           reject('Database error', err);
         });
@@ -343,7 +344,7 @@ module.exports = {
     //
     // build a C2 JWT
     //
-    buildToken(userObj) {
+    buildToken({ _id, username }) {
       let header = {
        alg : "HS256",
        typ : "JWT"
@@ -351,8 +352,8 @@ module.exports = {
       let now = new Date().getTime();
       let payload = {
         iss: this.$hub.name,
-        sub: userObj._id,
-        aud: userObj.username,
+        sub: _id,
+        aud: username,
         exp: Math.floor(new Date(now + this.tokenMs).getTime() / 1000),
         nbf: Math.floor(now / 1000),
         iat: Math.floor(now / 1000),
@@ -360,7 +361,7 @@ module.exports = {
       };
       let hp = Buffer.from(JSON.stringify(header)).toString('base64') + '.' + Buffer.from(JSON.stringify(payload)).toString('base64');
       let signature = crypto.createHmac('sha256', this.jwtSecret).update(hp).digest('hex');
-      this.$log(`built token for ${userObj.username} for ${this.tokenDays} days`);
+      this.$log(`built token for ${username} for ${this.tokenDays} days`);
       return `${hp}.${signature}`;
     },
     //
@@ -405,8 +406,6 @@ module.exports = {
             let user = this.$.Users.userById(user_id);
             if (!user) {
               res.status(401).send('token user invalid');
-            } else if (token !== user.token) {
-              res.status(409).send('token does not match the current token');
             } else if (user.mustChangePass && req.url !== '/api/v1/auth/reset') {
               res.status(409).send('you must change your password before continuing');
             } else {

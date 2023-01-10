@@ -119,8 +119,8 @@ module.exports = {
         if (req.body &&
             req.body.fullname &&
             req.body.username &&
-            req.body.email &&
-            req.body.password) {
+            req.body.password &&
+            req.body.role_ids && req.body.role_ids.length > 0) {
           req.body.password = utils.generatePasswordHash(req.body.password);
           req.body.mustChangePass = true;
 
