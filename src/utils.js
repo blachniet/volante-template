@@ -56,7 +56,7 @@ exports.generatePasswordHash = function(password) {
 // simple pick function uses an array of keys and returns a new object composed
 // of those keys IF they exist
 //
-exports.pick = function(obj, ...keys) {
+exports.pick = function(obj, keys) {
   return keys.reduce(function (ret, key) {
     ret[key] = obj[key];
     return ret;
