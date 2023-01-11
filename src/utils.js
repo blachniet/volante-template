@@ -52,3 +52,13 @@ exports.generatePasswordHash = function(password) {
   const hash = crypto.scryptSync(password, salt, 32).toString("hex");
   return `${salt}${hash}`;
 };
+//
+// simple pick function uses an array of keys and returns a new object composed
+// of those keys IF they exist
+//
+exports.pick = function(obj, ...keys) {
+  return keys.reduce(function (ret, key) {
+    ret[key] = obj[key];
+    return ret;
+  }, {});
+};

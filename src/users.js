@@ -323,19 +323,24 @@ module.exports = {
       })
       .all(hasPermission('manageUsers'))
       .put((req, res) => {
+        let update = {
+          ...utils.pick(req.body, ['enabled', 'fullname', 'username', 'email']),
+        };
         // if admin set password, set it and flag it for change
         if (req.body.password && req.body.password.length > 0) {
           this.$debug(`user ${req.User.username} password reset`);
-          req.body.password = utils.generatePasswordHash(req.body.password);
-          req.body.mustChangePass = true;
-        } else {
-          // otherwise, make sure we don't set it
-          delete req.body.password;
+          update.password = utils.generatePasswordHash(req.body.password);
+          update.mustChangePass = true;
         }
-        // delete _id
-        delete req.body._id;
+        // rehydrate ObjectIds in role_ids
+        if (req.body.role_ids && req.body.role_ids.length > 0) {
+          update.role_ids = [];
+          for (let rid of req.body.role_ids) {
+            update.role_ids.push(this.$.VolanteMongo.mongo.ObjectId(rid));
+          }
+        }
         this.$.VolanteMongo.updateOne('users', req.params.id, {
-          $set: req.body
+          $set: update
         }).then((rslt) => {
           res.send(rslt);
         }).catch((err) => {
